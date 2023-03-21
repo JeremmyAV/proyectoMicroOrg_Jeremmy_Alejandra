@@ -1,6 +1,6 @@
 public class Mapa {
     
-    private int matriz[][];
+    private Organismo matriz[][];
     private int anchoM;
     private int largoM;
 
@@ -9,16 +9,16 @@ public class Mapa {
         anchoM = ancho;
         largoM = largo;
 
-        matriz = new int[largoM][];
+        matriz = new Organismo[largoM][];
 
         for (int i = 0; i < largoM; i++)
         {
-            int temp1[];
-            temp1 = new int[anchoM];
+            Organismo temp1[];
+            temp1 = new Organismo[anchoM];
 
             for (int z = 0; z < anchoM; z++)
             {
-                temp1[z] = 0;
+                temp1[z] = null;
             }
 
             matriz[i] = temp1;
@@ -27,15 +27,15 @@ public class Mapa {
 
     public void vaciarCasilla(int posX, int posY)
     {
-        matriz[posX][posY] = 0;
+        matriz[posX][posY] = null;
     }
 
-    public void rellenarCasilla(int posX, int posY)
+    public void rellenarCasilla(int posX, int posY, Organismo oorr)
     {
-        matriz[posX][posY] = 2;
+        matriz[posX][posY] = oorr;
     }
 
-    public int getCasilla(int posX, int posY)
+    public Organismo getCasilla(int posX, int posY)
     {
         return matriz[posX][posY];
     }
@@ -47,8 +47,18 @@ public class Mapa {
         {
             for (int z = 0; z < anchoM; z++)
             {
-                System.out.print(matriz[i][z]);
-                System.out.print(" ");
+                if (matriz[i][z] == null){
+                    System.out.print("o");
+                }
+                else{
+                    if (matriz[i][z].tipo == "alimento" ){
+                        System.out.print("a");
+                    }
+                    else{
+                        System.out.print("m");
+                    }
+                }
+                    System.out.print(" ");
             }
             System.out.println(" ");
         }

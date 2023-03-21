@@ -1,27 +1,24 @@
-public class Alimento {
+public class Alimento extends Organismo {
     
     private String tipoAlim;
     private int enerAlim;
     private int tamaAlim;
-    private int posiAlim [];
 
-    public Alimento(String ti, int enA, int taA, int poA[])
+    public Alimento(String ti, int enA, int taA)
     {
         tipoAlim = ti;
         enerAlim = enA;
         tamaAlim = taA;
-        posiAlim = poA;
+        tipo = "alimento";
+
     }
 
 
-    public void imprimir()
+    public void Imprimir()
     {
         System.out.println(tipoAlim);
         System.out.println(enerAlim);
         System.out.println(tamaAlim);
-        
-        System.out.println(posiAlim[0]);
-        System.out.println(posiAlim[1]);
 
     }
 
