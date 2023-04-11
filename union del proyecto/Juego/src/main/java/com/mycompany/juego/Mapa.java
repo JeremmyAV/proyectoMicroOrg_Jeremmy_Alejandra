@@ -135,7 +135,7 @@ public class Mapa {
             {
                 oorr.consAlim(matriz[posX][posY].getEnergia(), matriz[posX][posY].getVision(), matriz[posX][posY].getVelocidad());
                 matriz[posX][posY] = oorr;
-                //crearAlimento();
+                crearAlimento();
                 return 2;
             }
             // si lo que hay es un microrganismo
@@ -370,4 +370,6 @@ public class Mapa {
             System.out.println(" ");
         }
     }
+
+
 }

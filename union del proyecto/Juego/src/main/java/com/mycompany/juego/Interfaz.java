@@ -1,14 +1,15 @@
 package com.mycompany.juego;
 
 
-import static com.mycompany.juego.Juego.jugador;
+import static com.mycompany.juego.Juego.gui;
 import static com.mycompany.juego.Juego.mapa1;
 
 import javax.swing.*;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public final class Interfaz extends JFrame {
     
@@ -48,48 +49,6 @@ public final class Interfaz extends JFrame {
                 panelDerecho.add(matriz[i][j]);
             }
         }
-
-        /* 
-        // Generar 10 posiciones aleatorias
-        Random rand = new Random();
-        int numPosiciones = 10;
-        int[] posicionesFila = new int[numPosiciones];
-        int[] posicionesColumna = new int[numPosiciones];
-        for (int i = 0; i < numPosiciones; i++) {
-            posicionesFila[i] = rand.nextInt(size);
-            posicionesColumna[i] = rand.nextInt(size);
-        }
-        // Agregar tipo de organismo en posiciones aleatorias
-        Organismo[] organismos = getOrganismos();
-        boolean jugadorGenerado = false;
-
-        for (int i = 0; i < numPosiciones; i++) {
-            int fila = posicionesFila[i];
-            int columna = posicionesColumna[i];
-
-            if (!jugadorGenerado) {
-                matriz[fila][columna].setOrganismo(new Jugador(1, 2, 3, 4));
-                matriz[fila][columna].setText("Jugador");
-                matriz[fila][columna].setForeground(Color.WHITE);
-                matriz[fila][columna].setBackground(Color.ORANGE);
-                jugadorGenerado = true;
-            } else {
-                int indiceNombre = rand.nextInt(organismos.length);
-                matriz[fila][columna].setOrganismo(organismos[indiceNombre]);
-                matriz[fila][columna].setText(organismos[indiceNombre].getTipo());
-
-                if ("Microorganismo".equals(organismos[indiceNombre].getTipo())) {
-                    matriz[fila][columna].setForeground(Color.WHITE);
-                    matriz[fila][columna].setBackground(Color.GREEN);
-                }
-                if ("Alimento".equals(organismos[indiceNombre].getTipo())) {
-                    matriz[fila][columna].setForeground(Color.WHITE);
-                    matriz[fila][columna].setBackground(Color.BLUE);
-                }
-            }
-        }
-
-        */
 
         // prueba de interpretar la matiz de organismos en la interfaz
         for (int i = 0; i < size; i++)
@@ -150,94 +109,60 @@ public final class Interfaz extends JFrame {
         panelIzquierdo.add(textArea, BorderLayout.CENTER);
         
          // Agregar el botón al panel izquierdo
-        JButton botonPI = new JButton("Turno");
+        /*JButton botonPI = new JButton("Turno");
         botonPI.setFont(new Font("Arial", Font.BOLD, 14));
         botonPI.setBackground(Color.BLUE);
         botonPI.setForeground(Color.BLACK);
-        panelIzquierdo.add(botonPI, BorderLayout.PAGE_END);
+        panelIzquierdo.add(botonPI, BorderLayout.PAGE_END);*/
 
         // Agregar los paneles a la ventana
         getContentPane().add(panelIzquierdo, BorderLayout.LINE_START);
         getContentPane().add(panelDerecho, BorderLayout.CENTER);
         setVisible(true); // hacer visible la ventana
         this.setSetencesInTextArea(textArea);
+    }
         
-        botonPI.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-           if ((Juego.filaSeleccionada != Juego.jugador.getFila()) && (Juego.filaSeleccionada != Juego.jugador.getColumna()))
-            {
-                int tempX = Juego.jugador.getFila();
-                int tempY = Juego.jugador.getColumna();
-                
-                Juego.mapa1.rellenarCasilla(Juego.filaSeleccionada, Juego.columnaSeleccionada, Juego.jugador );
-                Juego.mapa1.vaciarCasilla(tempX,tempY);
-
-                jugador.setPosicionX(Juego.filaSeleccionada);
-                jugador.setPosicionY(Juego.columnaSeleccionada);
-            }
-
+    
+   
+        public void moverMicroorganismos(){
             mapa1.imprListaDeMicrorg();
             int cordPorMover[];
-            for (int p = 0; p < mapa1.getMaximoMicroO(); p++)
-            {
+            for (int p = 0; p < mapa1.getMaximoMicroO(); p++){
                 int[] orgPorMover = mapa1.getListaMicro(p);
-
-                if (orgPorMover != null)
-                {
+                if (orgPorMover != null) {
                     Organismo tempOrgMover = mapa1.getCasilla(orgPorMover[0], orgPorMover[1]);
-
                     cordPorMover = tempOrgMover.mover(mapa1);
                     System.out.println("coordenadas a mover de microOrg");
                     System.out.println(cordPorMover[0]);
                     System.out.println(cordPorMover[1]);
-
                     int loQueComio = mapa1.rellenarCasilla(cordPorMover[0], cordPorMover[1], tempOrgMover);
-                    if (loQueComio == 1)
-                    {
+                    if (loQueComio == 1){
                         System.out.println("el juego finalizo, estas murido");
-                        break;
-                    }
-                    else if (loQueComio == 2)
-                    {
-                        //mapa1.crearAlimento();
-                    }
-                    
-                    
-                    if (loQueComio == 3)
-                    {
-                        Juego.mapa1.vaciarCasilla(orgPorMover[0], orgPorMover[1]);
-                    }
-                    else
-                    {
+                        break;}
+                    else if (loQueComio == 2){
+                        mapa1.crearAlimento(); }
+                    if (loQueComio == 3){
+                        Juego.mapa1.vaciarCasilla(orgPorMover[0], orgPorMover[1]); }
+                    else {
                         mapa1.vaciarCasilla(orgPorMover[0], orgPorMover[1]);
                         tempOrgMover.actualizarCoord(cordPorMover[0], cordPorMover[1]);
                         mapa1.actuaCordLista(orgPorMover[0], orgPorMover[1], cordPorMover);
                         if ((tempOrgMover.getBuscPosX() == tempOrgMover.getPosX()) && (tempOrgMover.getBuscPosY() == tempOrgMover.getPosY()))
-                                tempOrgMover.vaciarCordBuscar(mapa1);
-                    }
+                                tempOrgMover.vaciarCordBuscar(mapa1); } 
                 }
             }
-
-            actualizarMatriz(mapa1);
-            mapa1.imprimir();
-
-            
-            
+            gui.actualizarMatriz(mapa1);
+            mapa1.imprimir();  
         }
-        });
         
-        
-    }
+       // public void moverJugador()
+
 
     
         public void setSetencesInTextArea(JTextArea textArea) {
-        // Create an ArrayList of sentences
-        //Jugador jugador = new Jugador(1, 2, 3, 4);
-        /* 
         String info;
-        if (jugador.puedeMover()) {
-            info = "Puede moverse " + jugador.getVelocidad() + " casillas\n";
+        if (Juego.jugador.puedeMover()) {
+            info = "Puede moverse " + Juego.jugador.getVelocidad() + " casillas\n";
         } 
         else {
             info = "No puede moverse porque no tiene suficiente velocidad y energia\n";
@@ -245,13 +170,16 @@ public final class Interfaz extends JFrame {
 
         ArrayList<String> oraciones = new ArrayList<>();
         String jug = "                                      Jugador \n";
-        String energia = "Energía .............................................. " + jugador.getEnergia();
-        String vision = "Visión ................................................ " + jugador.getVision();
-        String velocidad = "Velocidad .......................................... " + jugador.getVelocidad();
-        String edad = "Edad .................................................. " + jugador.getEdad();
+        String energia = "Energía .............................................. " + Juego.jugador.getEnergia();
+        String vision = "Visión ................................................ " + Juego.jugador.getVision();
+        String velocidad = "Velocidad .......................................... " + Juego.jugador.getVelocidad();
+        String edad = "Edad .................................................. " + Juego.jugador.getEdad();
+        
+
 
         for (int i = 0; i < 1; i++) {
             oraciones.add(jug + "\n" + energia + "\n" + vision + "\n" + velocidad + "\n" + edad + "\n" + "\n" + info);
+            //oraciones.add(micro1 + "\n" + energia1 + "\n" + vision1 + "\n" + velocidad1   + "\n");
         }
 
         // Fill the text area with random sentences, with a 1.5-second pause between each line
@@ -263,7 +191,7 @@ public final class Interfaz extends JFrame {
                 Logger.getLogger(Interfaz.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-         */
+         
     }
    
 

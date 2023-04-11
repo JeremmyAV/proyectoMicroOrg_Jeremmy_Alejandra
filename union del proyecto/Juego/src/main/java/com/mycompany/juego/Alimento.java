@@ -20,6 +20,7 @@ public class Alimento extends Organismo {
     }
 
 
+    @Override
     public void Imprimir()
     {
         System.out.println(enerAlim);

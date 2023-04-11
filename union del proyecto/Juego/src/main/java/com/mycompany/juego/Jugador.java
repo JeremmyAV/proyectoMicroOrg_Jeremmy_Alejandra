@@ -28,6 +28,7 @@ public final class Jugador extends Organismo{
         columnaActual = tempColumna;
 
         tipo = "jugador";
+        esJug = 1;
 
     }
 
@@ -153,40 +154,26 @@ public final class Jugador extends Organismo{
     }
     
     public boolean puedeMover(){ //valida si puede moverse
-        int velTemp = this.velocidad;
-        if(this.energia >= 1 && this.velocidad >= 1 ){
-            //puede moverse
+        if(this.energia >= minEnergia && this.velocidad >= minVelocidad ){
             return true; 
         }else{
             return false;} 
     }
     
-    public void mover(){
-        if (puedeMover()){ // si se puede mover
-            //quiero que me tome en cuenta la pos del jugador 
-        }
-    }
-/*
-    public boolean puedeMover(){ //valida si puede moverse
-        int velTemp = this.velocidad;
-        if(this.energia > 0 && this.velocidad >= 1 ){
-            //puede moverse
-            return "Puede moverse " +velTemp + " casillas" ; 
-        }
-        else{
-            return "No puede moverse "; 
-        }
-        
-    }*/
  
     public int restarEnergia(){
-       int energiaRes = this.energia - 1;
-        return energiaRes;
+       this.energia = this.energia - 1;
+        return this.energia;
     }
     
-    public int restarVelocidad(int mov){
-       int velRes = this.velocidad - mov;
-        return velRes;
+    /* este metodo permite retorna la velocidad actualizada del jugador,
+        de acuerdo al mov que realizo */
+    public int restarVelocidad(int mov){ // se le indica la distancia y se le resta esa cantidad de movimientos a la velocidad
+        this.velocidad = this.velocidad - mov;
+        if (this.velocidad>= minVelocidad && this.velocidad<= maxVelocidad){ // debe estar dentro del rango 
+           
+        }
+        return this.velocidad; 
     }
 
     public void comerAlimento(int energiaAlimento, int velocidadAlimento, int visionAlimento) {
@@ -214,14 +201,12 @@ public final class Jugador extends Organismo{
 
     @Override
     public int getPosX() {
-            // TODO Auto-generated method stub
-            throw new UnsupportedOperationException("Unimplemented method 'getPosX'");
+        return filaActual;
     }
 
     @Override
     public int getPosY() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getPosY'");
+        return columnaActual;
     }
 
     @Override
