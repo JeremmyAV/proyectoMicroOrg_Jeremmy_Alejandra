@@ -1,2 +1,4 @@
-# proyectoMicroOrg_Jeremmy_Alejandra
-## Proyecto 1 - POO
+## Proyecto 1 - Juego Microorganismo
+
+# Creado por :
+Jeremmy Aguilar y Alejandra Delgado
