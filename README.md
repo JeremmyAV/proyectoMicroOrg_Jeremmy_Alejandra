@@ -1,4 +1,4 @@
-## Proyecto 1 - Juego Microorganismo
+# Proyecto 1 - Juego Microorganismos
 
-# Creado por :
+##Creado por :
 Jeremmy Aguilar y Alejandra Delgado
