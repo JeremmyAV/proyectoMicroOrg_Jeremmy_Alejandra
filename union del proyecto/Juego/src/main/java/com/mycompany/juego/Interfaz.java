@@ -207,6 +207,7 @@ public final class Interfaz extends JFrame {
             new MicroEnergia(1, 4, 8, 10),
             new MicroEnergia(4, 1, 2, 7),
             new MicroEnergia(2, 3, 7, 1),
+            //new MicroEnergia(2, 3, 4, 7),
             new AlimPeque(),
             new AlimPeque(),
             new AlimPeque(),};

@@ -143,6 +143,8 @@ public final class Jugador extends Organismo{
         return "jugador";
     }
 
+    
+
     public void setVelocidad(int velocidad) {
         if (velocidad < minVelocidad) {
             this.velocidad = minVelocidad;
