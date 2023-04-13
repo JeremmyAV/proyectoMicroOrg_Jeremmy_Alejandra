@@ -2,9 +2,9 @@ package com.mycompany.juego;
 public abstract class Organismo {
     String tipo;
     // Variables
-    static final int maxEnergia = 100;
-    static final int maxVision = 10;
-    static final int maxVelocidad = 10;
+    static final int maxEnergia = 200;
+    static final int maxVision = 20;
+    static final int maxVelocidad = 20;
     static final int  maxEdad = 30;
 
     static final int minEnergia = 0;

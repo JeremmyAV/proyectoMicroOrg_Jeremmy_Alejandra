@@ -100,42 +100,42 @@ public final class Jugador extends Organismo{
 
     @Override
     public int getMaxEnergia() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return maxEnergia;
     }
 
     @Override
     public int getMaxVision() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return maxVision;
     }
 
     @Override
     public int getMaxVelocidad() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return maxVelocidad;
     }
 
     @Override
     public int getMaxEdad() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return maxEdad;
     }
 
     @Override
     public int getMinEnergia() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return minEnergia;
     }
 
     @Override
     public int getMinVision() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return minVision;
     }
 
     @Override
     public int getMinVelocidad() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return minVelocidad;
     }
 
     @Override
     public int getMinEdad() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return minEdad;
     }
 
     @Override
@@ -154,8 +154,7 @@ public final class Jugador extends Organismo{
     }
     
     public boolean puedeMover(){ //valida si puede moverse
-        int velTemp = this.velocidad;
-        if(this.energia >= 1 && this.velocidad >= 1 ){
+        if(this.energia > minEnergia ){
             //puede moverse
             return true; 
         }else{
@@ -166,30 +165,33 @@ public final class Jugador extends Organismo{
         if (puedeMover()){ // si se puede mover
             //quiero que me tome en cuenta la pos del jugador 
         }
-    }
-/*
-    public boolean puedeMover(){ //valida si puede moverse
-        int velTemp = this.velocidad;
-        if(this.energia > 0 && this.velocidad >= 1 ){
-            //puede moverse
-            return "Puede moverse " +velTemp + " casillas" ; 
-        }
-        else{
-            return "No puede moverse "; 
-        }
-        
-    }*/
- 
+    } 
     public int restarEnergia(){
-       int energiaRes = this.energia - 1;
-        return energiaRes;
+        this.energia = this.energia - 1;
+        if (this.energia <= minEnergia || this.energia >= maxEnergia){ // debe estar dentro del rango  
+            setEnergia(this.energia);
+        }
+        return this.velocidad; 
     }
     
-    public int restarVelocidad(int mov){
-       int velRes = this.velocidad - mov;
-        return velRes;
+    public int restarVelocidad(int mov){ // se le indica la distancia y se le resta esa cantidad de movimientos a la velocidad
+        this.velocidad = this.velocidad - mov;
+        if (this.velocidad<= minVelocidad || this.velocidad>=maxVelocidad){ // debe estar dentro del rango  
+            setVelocidad(this.velocidad);
+        }
+        return this.velocidad; 
     }
-
+    
+    public int incrementaEdad(){//incrementa la edad en cada turno
+        this.edad = this.edad + 1; 
+        this.vision = this.vision - 1;
+        setVision(this.vision);
+        if (this.edad <= minEdad || this.edad >= maxEdad){ // debe estar dentro del rango  
+            setEdad(this.edad);
+        }
+        return this.edad;         
+    }
+    
     public void comerAlimento(int energiaAlimento, int velocidadAlimento, int visionAlimento) {
         this.energia += energiaAlimento;
         this.velocidad += velocidadAlimento;
@@ -274,6 +276,10 @@ public final class Jugador extends Organismo{
     public int valEsJug()
     {
         return esJug;
+    }
+
+    void decrementaVision() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
 }

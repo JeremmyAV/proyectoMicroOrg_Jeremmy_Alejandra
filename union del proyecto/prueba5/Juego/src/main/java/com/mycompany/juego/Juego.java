@@ -1,29 +1,37 @@
 package com.mycompany.juego;
 
 import javax.swing.JOptionPane;
+import javax.swing.JTextArea;
 
 public class Juego {
 
-    public static Mapa mapa1 = new Mapa(15, 15, 5);
-    public static Jugador jugador = new Jugador(10, 3, 2, 1, 5, 5);
+    public static Mapa mapa1 = new Mapa(50, 50, 5);
+    public static Jugador jugador = new Jugador(10, 5, 10, 1, 5, 5);
     public static Interfaz gui;
     public static int filaSeleccionada;
     public static int columnaSeleccionada;
     public static int juegoTerminado = 0;
     public Organismo organismo;
     
+    
     public static void main(String[] args) {
-
+        JTextArea textArea = new JTextArea();
         mapa1. rellenarCasilla(jugador.getFila(), jugador.getColumna(), jugador);
         mapa1.crearMicro();
         mapa1.crearVariosAlim(10);
+        
 
-        gui = new Interfaz(15 , mapa1);
+        gui = new Interfaz(50, mapa1, textArea);
         
         mapa1.imprimir();
 
     }
-    
+   /* public static void setTextArea(JTextArea textArea) {
+        Juego.textArea = textArea;
+    }    
+    public static JTextArea getTextArea() {
+        return textArea;
+    }*/
     public static void moverMicrorganismos()
         {
         mapa1.imprListaDeMicrorg();
@@ -44,15 +52,16 @@ public class Juego {
                 int loQueComio = mapa1.rellenarCasilla(cordPorMover[0], cordPorMover[1], tempOrgMover);
                 if (loQueComio == 1)
                 {
-                    System.out.println("el juego finalizo, estas murido");
-                    int respuesta = JOptionPane.showOptionDialog(null, "el juego finalizo, estas murido " , " cerrar programa", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new Object[]{"Sí", "No"}, JOptionPane.YES_OPTION);
+                    System.out.println("El juego finalizo, perdiste");
+                    int respuesta = JOptionPane.showOptionDialog(null, "El juego finalizo, perdiste \n Desea salir del juego? " , " cerrar programa", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new Object[]{"Sí", "No"}, JOptionPane.YES_OPTION);
                     juegoTerminado = 1;
                     gui.actualizarMatriz(mapa1);
+                    System.exit(0);
                     break;
                 }
                 else if (loQueComio == 2)
                 {
-                    //mapa1.crearAlimento();
+                    mapa1.crearAlimento();
                 }
                 
                 if (loQueComio == 3)

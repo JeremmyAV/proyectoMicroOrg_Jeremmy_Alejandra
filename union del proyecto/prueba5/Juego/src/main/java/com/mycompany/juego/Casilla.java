@@ -1,27 +1,26 @@
 package com.mycompany.juego;
 
 import static com.mycompany.juego.Interfaz.matriz;
+import static com.mycompany.juego.Juego.gui;
+import static com.mycompany.juego.Juego.juegoTerminado;
 import static com.mycompany.juego.Juego.mapa1;
 import java.awt.Color;
-import static java.awt.Color.RED;
-import static java.awt.Color.WHITE;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.AbstractButton;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
+import javax.swing.JTextArea;
 
 public class Casilla extends JButton implements ActionListener {
 
 
-
+    public static JTextArea textArea;
     public Organismo organismo;
     private int fila;
     private int columna;
     private int posX = 5;
     private int posY = 5;
-    private JButton ultimoBotonSeleccionado;
-
+    
     public int filaSeleccionada;
     public int columnaSeleccionada;
     private Organismo tipo;
@@ -41,12 +40,6 @@ public class Casilla extends JButton implements ActionListener {
         addActionListener(this); // se agrega como listener del botón
     }
     
-
-    
-    public void MovimientoAutomaticoOrganismo(){
-        // aquí iria la lógica del movimiento del organismo no jugador.
-    }
-
     public Organismo getOrganismo() {
         return organismo;
     }
@@ -58,8 +51,7 @@ public class Casilla extends JButton implements ActionListener {
     @Override 
     public void actionPerformed(ActionEvent e) {
 
-        if (Juego.juegoTerminado == 0)
-        {
+        if (Juego.juegoTerminado == 0){
             JButton botonClicado = (JButton) e.getSource();
             for (int i = 0; i < matriz.length; i++) {
                 for (int j = 0; j < matriz[i].length; j++) {
@@ -68,7 +60,7 @@ public class Casilla extends JButton implements ActionListener {
                         columnaSeleccionada = j;
                         break;
                     }
-            }
+                }
             }          
         
             posX = Juego.jugador.getFila();
@@ -78,10 +70,10 @@ public class Casilla extends JButton implements ActionListener {
             double distancia = Math.sqrt(Math.pow(filaSeleccionada - posX, 2) + Math.pow(columnaSeleccionada - posY, 2));
             int distanciaIn = (int) Math.round(distancia);
 
-            if ((fila == posX) || (columna == posY))
-            {
-                    if (distancia <= Juego.jugador.getVelocidad() && Juego.jugador.getEnergia()>0){
-
+            if ((fila == posX) || (columna == posY)){
+                if(Juego.jugador.puedeMover()){
+                    
+                    if (distancia <= Juego.jugador.getVelocidad()){
                         if("".equals(botonClicado.getText())){ //la casilla esta vacia
                             System.out.println("se puede mover");
                             System.out.println("Distancia recorrida: " + distanciaIn);
@@ -89,9 +81,10 @@ public class Casilla extends JButton implements ActionListener {
 
                             int respuesta = JOptionPane.showOptionDialog(null, "Deseas moverte " + distanciaIn + " casillas?", "Confirmar movimiento", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new Object[]{"Sí", "No"}, JOptionPane.YES_OPTION);
 
-                            if (respuesta == JOptionPane.YES_OPTION) {    
-                            Juego.jugador.restarEnergia();
-                            Juego.jugador.restarVelocidad(distanciaIn);
+                            if (respuesta == JOptionPane.YES_OPTION) {   
+                                Juego.jugador.incrementaEdad();
+                           // Juego.jugador.restarEnergia();
+                           // Juego.jugador.restarVelocidad(distanciaIn);
                             System.out.println(Juego.jugador.restarEnergia());
                             System.out.println(Juego.jugador.restarVelocidad(distanciaIn));
                             botonClicado.setBackground(Color.RED);
@@ -111,22 +104,21 @@ public class Casilla extends JButton implements ActionListener {
 
                             mapa1.vaciarCasilla(Juego.jugador.getPosX(), Juego.jugador.getPosY());
                             mapa1.rellenarCasilla(Juego.jugador.getPosX(), Juego.jugador.getPosY(), Juego.jugador);
-                            
-                            //ultimoBotonSeleccionado = botonClicado; 
 
                             Juego.moverMicrorganismos();
+                            gui.setSetencesInTextArea();
+                            
                             }
-                                            
                         }
                         else if("A".equals(botonClicado.getText())){ //la casilla tiene un alimento
                             System.out.println("se puede mover");
                             System.out.println("Distancia recorrida: " + distanciaIn);
                             System.out.println("Velocidad: "+ Juego.jugador.getVelocidad());
-                            
+
                             Organismo organismo = mapa1.getCasilla(filaSeleccionada, columnaSeleccionada);
                             if ("alimento".equals(mapa1.getCasilla(filaSeleccionada, columnaSeleccionada).tipo)){
                                 System.out.println("es un alim");
-                                
+
                                 int energiaAlim = organismo.getEnergia();
                                 int visionAlim = organismo.getVision();
                                 int velocidadAlim = organismo.getVelocidad();
@@ -137,12 +129,21 @@ public class Casilla extends JButton implements ActionListener {
                                 String mensaje = "¿Deseas comer este alimento?\n" + energia + "\n" + vision + "\n" + velocidad;
 
                                 int respuesta = JOptionPane.showOptionDialog(null, mensaje, "Confirmar movimiento", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new Object[]{"Sí", "No"}, JOptionPane.YES_OPTION);
-                            
+
                                 if (respuesta == JOptionPane.YES_OPTION) {                    
                                     botonClicado.setBackground(Color.RED);
                                     botonClicado.setText("J");
+                                    Juego.jugador.incrementaEdad(); //incrementa la edad
+                                    Juego.jugador.restarEnergia();
                                     // si come alimento entonces incrementa la vision, velocidad y energia;
                                     Juego.jugador.comerAlimento(energiaAlim, velocidadAlim, visionAlim);
+                                    String energiaActual = ("Energia: "+ Juego.jugador.getEnergia());
+                                    String visionActual = ("Vision: " + Juego.jugador.getVision());
+                                    String velocidadActual = ("Velocidad: "+Juego.jugador.getEnergia());                                    
+                                    String edadActual = ("Edad: "+Juego.jugador.getEdad());  
+                                    String mensajeJugador = "Acaba de comer un alimento, ahora tiene: \n" + energiaActual + "\n" + visionActual + "\n" + velocidadActual+ "\n" + edadActual;
+                                    JOptionPane.showMessageDialog(null,mensajeJugador);
+
                                     System.out.println("ya comio alim");
                                     System.out.println("Energia actual jugador: "+ Juego.jugador.getEnergia());
                                     System.out.println("Vision actual jugador: "+ Juego.jugador.getVision());
@@ -164,6 +165,7 @@ public class Casilla extends JButton implements ActionListener {
                                     mapa1.rellenarCasilla(Juego.jugador.getPosX(), Juego.jugador.getPosY(), Juego.jugador);
 
                                     Juego.moverMicrorganismos();
+                                    gui.setSetencesInTextArea();
                                 } 
                             }                                
                         }           
@@ -171,7 +173,7 @@ public class Casilla extends JButton implements ActionListener {
                             System.out.println("se puede mover");
                             System.out.println("Distancia recorrida: " + distanciaIn); //Cambiar x el boton anterior, toma la distancia del primer boton
                             System.out.println("Velocidad: "+ Juego.jugador.getVelocidad());
-                            
+
                             Organismo organismo = mapa1.getCasilla(filaSeleccionada, columnaSeleccionada);
                             if ("microOrg".equals(mapa1.getCasilla(filaSeleccionada, columnaSeleccionada).tipo)){
                                 System.out.println("es un micro");
@@ -179,14 +181,15 @@ public class Casilla extends JButton implements ActionListener {
                             int energiaMicro= organismo.getEnergia();
                             int visionMicro = organismo.getVision();
                             int velocidadMicro = organismo.getVelocidad();
+                            int edadMicro = organismo.getEdad();
                             String energia = ("Energia: "+ energiaMicro);
                             String vision = ("Vision: "+ visionMicro);
                             String velocidad = ("Velocidad: "+ velocidadMicro);
+                            String edad = ("Edad: "+ edadMicro);
+                            String mensaje = "¿Deseas comer este microorganismo?\n" + energia + "\n" + vision + "\n" + velocidad + "\n"+ edad;
 
-                            String mensaje = "¿Deseas comer este microorganismo?\n" + energia + "\n" + vision + "\n" + velocidad;
-                        
                             int respuesta = JOptionPane.showOptionDialog(null, mensaje, "Confirmar movimiento", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new Object[]{"Sí", "No"}, JOptionPane.YES_OPTION);
-                            
+
                                 if (respuesta == JOptionPane.YES_OPTION) {                    
                                     botonClicado.setBackground(Color.RED);
                                     botonClicado.setText("J");
@@ -196,6 +199,13 @@ public class Casilla extends JButton implements ActionListener {
                                     System.out.println("Energia actual jugador: "+ Juego.jugador.getEnergia());
                                     System.out.println("Vision actual jugador: "+ Juego.jugador.getVision());
                                     System.out.println("Velocidad actual jugador: "+ Juego.jugador.getVelocidad());
+
+                                    String energiaActual = ("Energia: "+ Juego.jugador.getEnergia());
+                                    String visionActual = ("Vision: " + Juego.jugador.getVision());
+                                    String velocidadActual = ("Velocidad: "+Juego.jugador.getVelocidad());                                    
+                                    String edadActual = ("Edad: "+Juego.jugador.getEdad());  
+                                    String mensajeJugador = "Acaba de comer un microorganismo, ahora tiene: \n" + energiaActual + "\n" + visionActual + "\n" + velocidadActual+ "\n" + edadActual;
+                                    JOptionPane.showMessageDialog(null,mensajeJugador);
 
                                     mapa1.vaciarCasilla(Juego.jugador.getPosX(), Juego.jugador.getPosY());
 
@@ -211,21 +221,22 @@ public class Casilla extends JButton implements ActionListener {
 
                                     mapa1.vaciarCasilla(Juego.jugador.getPosX(), Juego.jugador.getPosY());
                                     mapa1.rellenarCasilla(Juego.jugador.getPosX(), Juego.jugador.getPosY(), Juego.jugador);
-                                //  ultimoBotonSeleccionado.setBackground(Color.RED);
-                                //   ultimoBotonSeleccionado.setText("J");
                                     mapa1.borrarDeLista(Juego.jugador.getFila(), Juego.jugador.getColumna());
 
                                     Juego.moverMicrorganismos();
-                                    
+
                                 }
-                            }                
-                        }
+                                Juego.jugador.incrementaEdad(); // la edad aumenta en cada turno y disminuye la vision
+                                gui.setSetencesInTextArea();
+                            }
+
+                        } 
                     }              
                     else{
                         System.out.println("no se puede mover");
                         System.out.println("Distancia que desea recorrer: " + distanciaIn);
                         System.out.println("Velocidad: "+ Juego.jugador.getVelocidad());   
-                        
+
                         Organismo tempJug = Juego.jugador;
                         if ((fila <= tempJug.getPosX() + tempJug.getVision()) && (fila >= tempJug.getPosX() - tempJug.getVision()) && (columna <= tempJug.getPosY() + tempJug.getVision()) && (columna >= tempJug.getPosY() - tempJug.getVision()))
                         {
@@ -242,20 +253,24 @@ public class Casilla extends JButton implements ActionListener {
 
                                 JOptionPane.showMessageDialog(null, "No se puede mover " + distanciaIn + " casillas, no tiene suficiente velocidad"+ "\n" + "\n" + mensaje);
                             }
-                            else
-                            {
+                            else{
                                 JOptionPane.showMessageDialog(null, "No se puede mover " + distanciaIn + " casillas, no tiene suficiente velocidad");
                             }
                         }
-                        else
-                        {
+                        else{
                             JOptionPane.showMessageDialog(null, "No se puede mover " + distanciaIn + " casillas, no tiene suficiente velocidad");
                         }
-                    }
-                
+                    }    
+                }
+                else{
+                    JOptionPane.showMessageDialog(null, "Ha perdido! Se quedo sin energia  ");
+                    System.out.println("Energia jugador: "+ Juego.jugador.getEnergia());
+                    int respuesta = JOptionPane.showOptionDialog(null, "El juego finalizo, perdiste \n Desea salir del juego? " , " cerrar programa", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new Object[]{"Sí", "No"}, JOptionPane.YES_OPTION);
+                    juegoTerminado = 1; 
+                    System.exit(0);
+                }
             }
-            else if (mapa1.getCasilla(fila, columna) != null)
-            {
+            else if (mapa1.getCasilla(fila, columna) != null){
                 Organismo tempJug = Juego.jugador;
                 if ((fila <= tempJug.getPosX() + tempJug.getVision()) && (fila >= tempJug.getPosX() - tempJug.getVision()) && (columna <= tempJug.getPosY() + tempJug.getVision()) && (columna >= tempJug.getPosY() - tempJug.getVision()))
                 {
@@ -272,15 +287,16 @@ public class Casilla extends JButton implements ActionListener {
                     JOptionPane.showMessageDialog(null, mensaje);
                             
                 }
-                else
-                {
+                else{
                     JOptionPane.showMessageDialog(null, "Este organismo se encuentra muy lejos.");
                 }
             }
         }
-        else
-        {
+        else{
             JOptionPane.showMessageDialog(null, "El juego ha terminado.");
+                    int respuesta = JOptionPane.showOptionDialog(null, "El juego finalizo, perdiste \n Desea salir del juego? " , " cerrar programa", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new Object[]{"Sí", "No"}, JOptionPane.YES_OPTION);
+                    juegoTerminado = 1; 
+                    System.exit(0);           
         }
     }
     
