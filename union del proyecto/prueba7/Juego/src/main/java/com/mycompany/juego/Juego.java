@@ -18,7 +18,7 @@ public class Juego {
         JTextArea textArea = new JTextArea();
         mapa1. rellenarCasilla(jugador.getFila(), jugador.getColumna(), jugador);
         mapa1.crearMicro();
-        mapa1.crearVariosAlim(10);
+        mapa1.crearVariosAlim(20);
         
 
         gui = new Interfaz(50, mapa1, textArea);
@@ -26,12 +26,7 @@ public class Juego {
         mapa1.imprimir();
 
     }
-   /* public static void setTextArea(JTextArea textArea) {
-        Juego.textArea = textArea;
-    }    
-    public static JTextArea getTextArea() {
-        return textArea;
-    }*/
+
     public static void moverMicrorganismos()
         {
         mapa1.imprListaDeMicrorg();
