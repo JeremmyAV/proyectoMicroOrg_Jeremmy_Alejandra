@@ -7,6 +7,7 @@ import static com.mycompany.juego.Juego.mapa1;
 import javax.swing.*;
 
 import java.awt.*;
+import static java.awt.BorderLayout.PAGE_START;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -16,10 +17,11 @@ public final class Interfaz extends JFrame {
 
     private int size;
     public static Casilla[][] matriz;
-
-    public Interfaz(int size, Mapa tempMapa) {
+    private JTextArea textArea;
+    public Interfaz(int size, Mapa tempMapa,JTextArea textArea ) {
+       // J//ScrollPane scrollPane = new JScrollPane(textArea);
         this.size = size;
-
+        this.textArea = textArea;
         matriz = new Casilla[size][size];
         // Configurar la ventana
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -96,9 +98,16 @@ public final class Interfaz extends JFrame {
         JLabel labelEstadisticas = new JLabel("Historial del juego", SwingConstants.CENTER);
         labelEstadisticas.setFont(new Font("Arial", Font.BOLD, 16));
         panelIzquierdo.add(labelEstadisticas, BorderLayout.PAGE_START);
+        
+        String jug = "                                      Jugador \n";
+        JTextArea miTextArea = new JTextArea();
+        miTextArea.setEditable(false); // Deshabilita la edición del JTextArea
+        miTextArea.setLineWrap(true); // Habilita el ajuste automático de líneas
+        miTextArea.setWrapStyleWord(true); // Habilita el ajuste de líneas por palabras
+        miTextArea.setText(jug);
+        panelIzquierdo.add(miTextArea);     
 
         // Agregar un TextArea al panel izquierdo que ocupe todo el espacio disponible
-        JTextArea textArea = new JTextArea();
         // Create a JTextArea and set its properties
         textArea.setEditable(true);
         textArea.setLineWrap(true);
@@ -108,22 +117,17 @@ public final class Interfaz extends JFrame {
         textArea.setEditable(false);
         panelIzquierdo.add(textArea, BorderLayout.CENTER);
         
-         // Agregar el botón al panel izquierdo
-        /*JButton botonPI = new JButton("Turno");
-        botonPI.setFont(new Font("Arial", Font.BOLD, 14));
-        botonPI.setBackground(Color.BLUE);
-        botonPI.setForeground(Color.BLACK);
-        panelIzquierdo.add(botonPI, BorderLayout.PAGE_END);*/
-
         // Agregar los paneles a la ventana
         getContentPane().add(panelIzquierdo, BorderLayout.LINE_START);
         getContentPane().add(panelDerecho, BorderLayout.CENTER);
         setVisible(true); // hacer visible la ventana
-        this.setSetencesInTextArea(textArea);
+        this.setSetencesInTextArea();
+        JScrollPane scrollPane = new JScrollPane(this.textArea);
+        
+        panelIzquierdo.add(scrollPane);
+        
     }
         
-    
-   
         public void moverMicroorganismos(){
             mapa1.imprListaDeMicrorg();
             int cordPorMover[];
@@ -155,11 +159,7 @@ public final class Interfaz extends JFrame {
             mapa1.imprimir();  
         }
         
-       // public void moverJugador()
-
-
-    
-        public void setSetencesInTextArea(JTextArea textArea) {
+        public void setSetencesInTextArea() {
         String info;
         if (Juego.jugador.puedeMover()) {
             info = "Puede moverse " + Juego.jugador.getVelocidad() + " casillas\n";
@@ -175,14 +175,13 @@ public final class Interfaz extends JFrame {
         String velocidad = "Velocidad .......................................... " + Juego.jugador.getVelocidad();
         String edad = "Edad .................................................. " + Juego.jugador.getEdad();
         
+        
 
 
         for (int i = 0; i < 1; i++) {
-            oraciones.add(jug + "\n" + energia + "\n" + vision + "\n" + velocidad + "\n" + edad + "\n" + "\n" + info);
-            //oraciones.add(micro1 + "\n" + energia1 + "\n" + vision1 + "\n" + velocidad1   + "\n");
+            oraciones.add("\n" + jug +"\n"+ energia + "\n" + vision + "\n" + velocidad + "\n" + edad + "\n" + "\n" + info);
         }
 
-        // Fill the text area with random sentences, with a 1.5-second pause between each line
         for (String sentence : oraciones) {
             textArea.append(sentence + "\n");
             try {
@@ -193,10 +192,8 @@ public final class Interfaz extends JFrame {
         }
          
     }
-   
 
 
-    
 
     // Genera organismos aleatorios
     public Organismo[] getOrganismos() {
@@ -207,7 +204,6 @@ public final class Interfaz extends JFrame {
             new MicroEnergia(1, 4, 8, 10),
             new MicroEnergia(4, 1, 2, 7),
             new MicroEnergia(2, 3, 7, 1),
-            //new MicroEnergia(2, 3, 4, 7),
             new AlimPeque(),
             new AlimPeque(),
             new AlimPeque(),};

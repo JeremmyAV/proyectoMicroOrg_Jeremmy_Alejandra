@@ -16,6 +16,7 @@ public final class Interfaz extends JFrame {
 
     private int size;
     public static Casilla[][] matriz;
+    public static JTextArea textArea;
 
     public Interfaz(int size, Mapa tempMapa) {
         this.size = size;
@@ -108,13 +109,6 @@ public final class Interfaz extends JFrame {
         textArea.setEditable(false);
         panelIzquierdo.add(textArea, BorderLayout.CENTER);
         
-         // Agregar el botón al panel izquierdo
-        /*JButton botonPI = new JButton("Turno");
-        botonPI.setFont(new Font("Arial", Font.BOLD, 14));
-        botonPI.setBackground(Color.BLUE);
-        botonPI.setForeground(Color.BLACK);
-        panelIzquierdo.add(botonPI, BorderLayout.PAGE_END);*/
-
         // Agregar los paneles a la ventana
         getContentPane().add(panelIzquierdo, BorderLayout.LINE_START);
         getContentPane().add(panelDerecho, BorderLayout.CENTER);
@@ -122,8 +116,6 @@ public final class Interfaz extends JFrame {
         this.setSetencesInTextArea(textArea);
     }
         
-    
-   
         public void moverMicroorganismos(){
             mapa1.imprListaDeMicrorg();
             int cordPorMover[];
@@ -179,10 +171,8 @@ public final class Interfaz extends JFrame {
 
         for (int i = 0; i < 1; i++) {
             oraciones.add(jug + "\n" + energia + "\n" + vision + "\n" + velocidad + "\n" + edad + "\n" + "\n" + info);
-            //oraciones.add(micro1 + "\n" + energia1 + "\n" + vision1 + "\n" + velocidad1   + "\n");
         }
 
-        // Fill the text area with random sentences, with a 1.5-second pause between each line
         for (String sentence : oraciones) {
             textArea.append(sentence + "\n");
             try {
@@ -196,7 +186,6 @@ public final class Interfaz extends JFrame {
    
 
 
-    
 
     // Genera organismos aleatorios
     public Organismo[] getOrganismos() {
@@ -207,7 +196,6 @@ public final class Interfaz extends JFrame {
             new MicroEnergia(1, 4, 8, 10),
             new MicroEnergia(4, 1, 2, 7),
             new MicroEnergia(2, 3, 7, 1),
-            //new MicroEnergia(2, 3, 4, 7),
             new AlimPeque(),
             new AlimPeque(),
             new AlimPeque(),};
